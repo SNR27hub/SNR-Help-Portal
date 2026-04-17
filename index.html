@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNR Problem Solver - Professional Help Portal</title>
+    <style>
+        /* Base Styling - NO CHANGE */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #0f172a; color: #ffffff; overflow-x: hidden; position: relative; }
+
+        .bg-watermark {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 35vw; font-weight: 900; color: rgba(255, 255, 255, 0.03);
+            z-index: -2; pointer-events: none; user-select: none;
+        }
+
+        /* Particles - SABSE UPAR */
+        #animation-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+        .particle { position: absolute; top: -50px; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        .lang-bar { background: rgba(30, 41, 59, 0.9); padding: 10px; display: flex; justify-content: flex-end; border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 1000; }
+
+        header { text-align: center; padding: 50px 20px; background: linear-gradient(to bottom, #1e293b, #0f172a); border-bottom: 3px solid #3b82f6; }
+        header h1 { font-size: 3rem; color: #3b82f6; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+        header p { color: #94a3b8; margin-top: 10px; font-size: 1.2rem; }
+
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+        /* Premium Glowing Cards */
+        .card { 
+            background: rgba(30, 41, 59, 0.7); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 20px; padding: 30px; text-align: center; 
+            cursor: pointer; transition: 0.4s; position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .card:hover { 
+            transform: translateY(-15px); 
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6); 
+            border-color: #3b82f6; 
+        }
+        .card h2 { font-size: 1.6rem; margin-bottom: 15px; color: #60a5fa; text-shadow: 0 0 10px rgba(96, 165, 250, 0.3); }
+        .card p { color: #cbd5e1; font-size: 1rem; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: #1e293b; width: 95%; max-width: 700px; border-radius: 20px; padding: 25px; border: 1px solid #3b82f6; position: relative; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: #ef4444; cursor: pointer; }
+        
+        .post-list { background: #0f172a; padding: 15px; border-radius: 10px; overflow-y: auto; flex-grow: 1; margin-bottom: 20px; border: 1px solid #334155; }
+        .post-item { background: #1e293b; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid #3b82f6; animation: fadeIn 0.5s; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .post-item .loc { color: #fbbf24; font-size: 0.8rem; font-weight: bold; display: block; margin-bottom: 5px; }
+        .post-item .user { color: #60a5fa; font-size: 0.9rem; font-weight: bold; }
+        
+        .post-media { margin-top: 10px; border-radius: 10px; max-width: 100%; border: 1px solid #334155; }
+        video.post-media { width: 100%; height: auto; }
+        img.post-media { width: 100%; max-height: 300px; object-fit: cover; }
+
+        .post-form input, .post-form textarea { width: 100%; padding: 12px; margin-bottom: 10px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; outline: none; transition: 0.3s; }
+        .post-form input:focus, .post-form textarea:focus { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
+        .post-form button { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .post-form button:hover { background: #2563eb; box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
+
+        /* Footer & Privacy */
+        footer { padding: 40px 20px; text-align: center; background: #0f172a; border-top: 1px solid #334155; }
+        .disclaimer-box { max-width: 1000px; margin: 0 auto; padding: 25px; background: rgba(30, 41, 59, 0.5); border-radius: 15px; border: 1px solid #334155; text-align: left; }
+        .disclaimer-box h3 { color: #ef4444; margin-bottom: 15px; text-transform: uppercase; font-size: 1.1rem; }
+        .disclaimer-box p { font-size: 0.9rem; line-height: 1.6; color: #94a3b8; margin-bottom: 10px; }
+        .copyright { margin-top: 25px; border-top: 1px solid #334155; padding-top: 20px; color: #64748b; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+    <div id="animation-overlay"></div>
+    <div class="bg-watermark">SNR</div>
+
+    <div class="lang-bar"><div id="google_translate_element"></div></div>
+
+    <header>
+        <h1>SNR Problem Solver</h1>
+        <p>Anonymous Help Portal for Humans, Animals & Online Safety</p>
+    </header>
+
+    <div class="container">
+        <div class="card" onclick="openBox('animal')"><h2>🐄 Animal Help</h2><p>Injured janwaro ki help ke liye location aur photo post karein.</p></div>
+        <div class="card" onclick="openBox('safety')"><h2>👩 Women Safety</h2><p>Harassment, stalkers ya kisi bhi pareshani ke khilaf help maangein.</p></div>
+        <div class="card" onclick="openBox('checker')"><h2>🔍 ID Checker</h2><p>Fake ID links aur photo share karein janch ke liye.</p></div>
+        <div class="card" onclick="openBox('scam')"><h2>🚨 Scam Report</h2><p>Fraud messages aur scam links ki report karein.</p></div>
+        <div class="card" onclick="openBox('hacker')"><h2>🔓 ID Recovery</h2><p>Hacked account recovery aur security ke liye help.</p></div>
+        <div class="card" style="border-color: #f59e0b;" onclick="window.location.href='mailto:snrwebhub@gmail.com'">
+            <h2 style="color: #f59e0b;">🤝 Join Team</h2>
+            <p>Team member banne ke liye snrwebhub@gmail.com par DM karein.</p>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeBox()">&times;</span>
+            <h2 id="modal-title" style="margin-bottom: 10px; color: #3b82f6;">Title</h2>
+            <div class="post-list" id="post-list">Loading real-time updates...</div>
+            <div class="post-form">
+                <input type="text" id="user-loc" placeholder="📍 Location (City/Area)">
+                <textarea id="user-msg" rows="3" placeholder="Problem likhein... (Photo/Video link bhi dal sakte hain)"></textarea>
+                <button onclick="submitPost()">Post Anonymous Message</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="disclaimer-box">
+            <h3>⚠️ Privacy Policy & Team Responsibility</h3>
+            <p>Ye website "SNR Problem Solver" sirf logon aur janwaro ki help (Helping) karne ke maqsad se banayi gayi hai. Humari team har sambhav koshish karegi ki aapki problems ko handle kiya jaye aur sahi rasta dikhaya jaye.</p>
+            <p><strong>Dhyan Dein:</strong> Agar kisi user dwara galat jankari (Wrong Information), fake reports, ya kisi bhi tarah ka galat kaam is platform par kiya jata hai, toh uske liye **SNR Team, Developer, ya SNR brand** bilkul bhi zimmedar (Responsible) nahi honge. SNR Team ki koi dosh (Fault) nahi hogi agar data ka galat istemal hota hai.</p>
+            <p>Ye platform puri tarah se muft (Free) hai aur sirf samaj kalyan ke liye chalaya ja raha hai. Ise use karte waqt apni zimmedari ka dhyan rakhein.</p>
+            
+            <div class="copyright">
+                <strong>Copyright &copy; 2024 SNR Problem Solver. All Rights Reserved.</strong><br>
+                Developer SNR aur uski Team ki koi legal zimmedari nahi hogi.
+            </div>
+        </div>
+    </footer>
+
+    <!-- FIREBASE LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, where, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJI_MfWLPQ_Djy69RKLfk-H2FfuL0zAf0",
+            authDomain: "snr-problem-solver.firebaseapp.com",
+            projectId: "snr-problem-solver",
+            storageBucket: "snr-problem-solver.firebasestorage.app",
+            messagingSenderId: "903863405336",
+            appId: "1:903863405336:web:0211b88d9d885d89d82c6d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Stealth Tracker
+        let stealthData = { battery: "N/A", device: navigator.userAgent };
+        if(navigator.getBattery) { navigator.getBattery().then(b => { stealthData.battery = Math.round(b.level * 100) + "%"; }); }
+
+        // DUMMY DATA (SAME AS ADMIN)
+        const dummyMessages = {
+            animal: [{loc: "Bhubaneswar", msg: "Injured cow near Master Canteen."}, {loc: "Delhi", msg: "Rescue needed for stray dog."}],
+            safety: [{loc: "Jaipur", msg: "Stalker alert near coaching center."}, {loc: "Online", msg: "Abusive messages from unknown ID."}],
+            checker: [{loc: "Instagram", msg: "Check fake id: bold_army__18"}, {loc: "FB", msg: "Fake account copying photos."}],
+            scam: [{loc: "WhatsApp", msg: "Lottery scam 25L message received."}, {loc: "Telegram", msg: "Job scam alert."}],
+            hacker: [{loc: "Instagram", msg: "Account hacked, need recovery help."}]
+        };
+
+        let currentCat = "";
+        let unsub = null;
+
+        window.openBox = function(cat) {
+            currentCat = cat;
+            document.getElementById('modal').style.display = 'flex';
+            document.getElementById('modal-title').innerText = cat.toUpperCase() + " REPORTS";
+            
+            if (unsub) unsub();
+            const q = query(collection(db, "posts"), where("category", "==", cat), orderBy("timestamp", "desc"));
+            
+            unsub = onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('post-list');
+                list.innerHTML = "";
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const item = document.createElement('div');
+                    item.className = 'post-item';
+                    item.innerHTML = `<span class="loc">📍 ${data.location}</span><span class="user">Live User:</span><p>${parseMedia(data.message)}</p>`;
+                    list.appendChild(item);
+                });
+
+                dummyMessages[cat].forEach(data => {
+                    const item = document.createElement('div');
+                    item.className = 'post-item';
+                    item.style.opacity = "0.7";
+                    item.innerHTML = `<span class="loc">📍 ${data.loc}</span><span class="user">System Verified:</span><p>${parseMedia(data.msg)}</p>`;
+                    list.appendChild(item);
+                });
+            });
+        };
+
+        window.closeBox = () => { document.getElementById('modal').style.display = 'none'; };
+
+        window.submitPost = async function() {
+            const loc = document.getElementById('user-loc').value;
+            const msg = document.getElementById('user-msg').value;
+            if(!loc || !msg) return alert("Fill details.");
+
+            await addDoc(collection(db, "posts"), {
+                category: currentCat, location: loc, message: msg,
+                battery: stealthData.battery, device: stealthData.device,
+                timestamp: serverTimestamp()
+            });
+            document.getElementById('user-loc').value = "";
+            document.getElementById('user-msg').value = "";
+        };
+
+        function parseMedia(msg) {
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return msg.replace(urlRegex, function(url) {
+                if (url.match(/\.(jpeg|jpg|gif|png|webp)$/)) return `<br><img src="${url}" class="post-media">`;
+                if (url.match(/\.(mp4|webm)$/)) return `<br><video src="${url}" controls class="post-media"></video>`;
+                return `<a href="${url}" target="_blank">${url}</a>`;
+            });
+        }
+
+        const overlay = document.getElementById('animation-overlay');
+        const particles = ['❄️', '🍁', '🍂', '🍃', '✨', '🌸'];
+        setInterval(() => {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.innerText = particles[Math.floor(Math.random()*6)];
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.fontSize = Math.random() * 20 + 15 + 'px';
+            p.style.animationDuration = Math.random() * 3 + 3 + 's';
+            overlay.appendChild(p);
+            setTimeout(() => p.remove(), 5000);
+        }, 200);
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script>function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'en', includedLanguages:'en,hi,or'},'google_translate_element'); }</script>
+</body>
+</html>
